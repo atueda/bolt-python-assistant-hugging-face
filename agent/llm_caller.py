@@ -70,8 +70,8 @@ def _call_huggingface_chat_completion(
 
         logger.info("Using Hugging Face Chat Completion API")
 
-        # Create inference client (使用router.huggingface.co而不是api-inference.huggingface.co)
-        client = InferenceClient(token=api_key)
+        # Create inference client using the new router endpoint
+        client = InferenceClient(token=api_key, base_url="https://router.huggingface.co/v1")
 
         # Build messages array like in Node.js sample
         messages = [
@@ -180,10 +180,10 @@ print(message)
 
 何か具体的なPythonの質問があれば、お気軽にお聞きください！"""
 
-        # Check for JavaScript
-        elif "javascript" in user_message_lower or "js" in user_message_lower:
-            logger.info("DEBUG: Found JavaScript keywords")
-            return """💻 JavaScriptは、主にWebブラウザで動作するプログラミング言語です。
+            # Check for JavaScript
+            elif "javascript" in user_message_lower or "js" in user_message_lower:
+                logger.info("DEBUG: Found JavaScript keywords")
+                return """💻 JavaScriptは、主にWebブラウザで動作するプログラミング言語です。
 
 **用途:**
 - Webページのインタラクティブな機能
@@ -205,19 +205,19 @@ document.getElementById("myButton").addEventListener("click", function() {
 
 具体的なJavaScriptの質問があれば、詳しく説明します！"""
 
-        # Optimization questions
-        elif any(
-            keyword in user_message_lower
-            for keyword in [
-                "optimize",
-                "最適化",
-                "performance",
-                "パフォーマンス",
-                "speed",
-                "高速",
-            ]
-        ):
-            return """⚡ コードの最適化についてお手伝いします！
+            # Optimization questions
+            elif any(
+                keyword in user_message_lower
+                for keyword in [
+                    "optimize",
+                    "最適化",
+                    "performance",
+                    "パフォーマンス",
+                    "speed",
+                    "高速",
+                ]
+            ):
+                return """⚡ コードの最適化についてお手伝いします！
 
 **最適化のポイント:**
 - アルゴリズムの計算量改善
@@ -227,19 +227,19 @@ document.getElementById("myButton").addEventListener("click", function() {
 
 最適化したいコードを教えていただければ、具体的な改善提案をします！"""
 
-        # General help or greeting
-        elif any(
-            keyword in user_message_lower
-            for keyword in [
-                "hello",
-                "hi",
-                "こんにちは",
-                "はじめまして",
-                "help",
-                "ヘルプ",
-            ]
-        ):
-            return """👋 こんにちは！コード専門のアシスタントです。
+            # General help or greeting
+            elif any(
+                keyword in user_message_lower
+                for keyword in [
+                    "hello",
+                    "hi",
+                    "こんにちは",
+                    "はじめまして",
+                    "help",
+                    "ヘルプ",
+                ]
+            ):
+                return """👋 こんにちは！コード専門のアシスタントです。
 
 **お手伝いできること:**
 💻 コードの説明と解析
@@ -250,21 +250,21 @@ document.getElementById("myButton").addEventListener("click", function() {
 
 何かお困りのことがあれば、お気軽にお聞きください！"""
 
-        # Error/debugging questions
-        elif any(
-            keyword in user_message_lower
-            for keyword in [
-                "error",
-                "エラー",
-                "bug",
-                "バグ",
-                "debug",
-                "fix",
-                "修正",
-                "解決",
-            ]
-        ):
-            return """🐛 エラーやバグの解決をお手伝いします！
+            # Error/debugging questions
+            elif any(
+                keyword in user_message_lower
+                for keyword in [
+                    "error",
+                    "エラー",
+                    "bug",
+                    "バグ",
+                    "debug",
+                    "fix",
+                    "修正",
+                    "解決",
+                ]
+            ):
+                return """🐛 エラーやバグの解決をお手伝いします！
 
 **トラブルシューティングのために以下の情報があると助かります:**
 1. エラーメッセージの全文
@@ -274,10 +274,10 @@ document.getElementById("myButton").addEventListener("click", function() {
 
 コードとエラーメッセージを共有していただければ、原因と解決策を提案します！"""
 
-        # General programming response for all other code-related questions
-        else:
-            logger.info("DEBUG: Using general programming response")
-            return """💻 プログラミングに関するご質問ですね！
+            # General programming response for all other code-related questions
+            else:
+                logger.info("DEBUG: Using general programming response")
+                return """💻 プログラミングに関するご質問ですね！
 
 コードの説明、デバッグ、最適化など、どのようなことでもお手伝いします。
 
@@ -289,8 +289,9 @@ document.getElementById("myButton").addEventListener("click", function() {
 
 コードを貼り付けていただければ、詳しく分析してアドバイスします！"""
 
-    # Fallback for non-programming questions
-    return f"""🤖 「{user_message}」についてのご質問ですね。
+        # Fallback for non-programming questions
+        else:
+            return f"""🤖 「{user_message}」についてのご質問ですね。
 
 私はプログラミング専門のアシスタントです。以下のようなことでお手伝いできます：
 
