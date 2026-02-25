@@ -1,0 +1,17 @@
+slack-sdk==3.40.0
+slack-bolt==1.27.0
+slack-cli-hooks<1.0.0
+
+# If you use a different LLM vendor, replace this dependency
+openai==2.16.0
+
+# Hugging Face transformers for local inference
+huggingface-hub==0.28.0
+transformers==4.48.1
+torch>=2.0.0
+sentencepiece
+
+pytest==9.0.2
+ruff==0.14.14
+python-dotenv==1.2.1
+slack-cli-hooks<1.0.0
